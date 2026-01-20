@@ -1,13 +1,16 @@
 package com.kxprem.hospitalManagement.repository;
 
+import com.kxprem.hospitalManagement.dto.BloodGroupCountResponseEntity;
 import com.kxprem.hospitalManagement.entity.Patient;
 import com.kxprem.hospitalManagement.entity.type.BloodGroupType;
 import jakarta.transaction.Transactional;
+import org.springframework.data.domain.Page;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
+import org.springframework.data.domain.Pageable;
 
 import java.time.LocalDate;
 import java.util.List;
@@ -29,11 +32,14 @@ public interface PatientRepository extends JpaRepository<Patient,Long> {
     @Query("select p from Patient p where p.birthDate > :birthDate")
     List<Patient> findByBornAfterDate(@Param("birthDate") LocalDate birthDate);
 
-    @Query("select p.bloodGroup, count(p) from Patient p group by p.bloodGroup")
-    List<Object[]> countEachBloodGroupType ();
+//    @Query("select p.bloodGroup, count(p) from Patient p group by p.bloodGroup")
+//    List<Object[]> countEachBloodGroupType ();
+
+    @Query("select  new com.kxprem.hospitalManagement.dto.BloodGroupCountResponseEntity (p.bloodGroup, count(p)) from Patient p group by p.bloodGroup")
+    List<BloodGroupCountResponseEntity> countEachBloodGroupType();
 
     @Query(value = "select  * from patient", nativeQuery = true)
-    List<Patient> findAllPatients();
+    Page<Patient> findAllPatients(Pageable pageable);
 
     @Transactional
     @Modifying

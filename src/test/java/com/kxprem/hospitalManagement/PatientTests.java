@@ -1,5 +1,6 @@
 package com.kxprem.hospitalManagement;
 
+import com.kxprem.hospitalManagement.dto.BloodGroupCountResponseEntity;
 import com.kxprem.hospitalManagement.entity.Patient;
 import com.kxprem.hospitalManagement.entity.type.BloodGroupType;
 import com.kxprem.hospitalManagement.repository.PatientRepository;
@@ -7,6 +8,10 @@ import com.kxprem.hospitalManagement.service.PatientService;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 
 import java.time.LocalDate;
 import java.util.List;
@@ -41,11 +46,11 @@ public class PatientTests {
 
 //                .findByNameContainingOrderByIdDesc("Di");
 
-//        List<Patient> patientList =patientRepository.findAllPatients();
-//
-//        for(Patient patient: patientList){
-//            System.out.println(patient);
-//        }
+        Page<Patient> patientList =patientRepository.findAllPatients(PageRequest.of(0,2, Sort.by("name")));
+
+        for(Patient patient: patientList){
+            System.out.println(patient);
+        }
 
 //        using JPQL but will be bettered by Projection
 //        List<Object[]> bloodGroupList=patientRepository.countEachBloodGroupType();
@@ -53,7 +58,13 @@ public class PatientTests {
 //            System.out.println(objects[0]+" "+objects[1]);
 //        }
 
-        int numberOfPatientUpdated = patientRepository.updateNameWithId("Aarav Singh", 2L);
+//        projection one:
+//        List<BloodGroupCountResponseEntity> bloodGroupList=patientRepository.countEachBloodGroupType();
+//        for(BloodGroupCountResponseEntity bloodGroupCountResponseEntity: bloodGroupList){
+//            System.out.println(bloodGroupCountResponseEntity);
+//        }
+
+//        int numberOfPatientUpdated = patientRepository.updateNameWithId("Aarav Singh", 2L);
 
     }
 
